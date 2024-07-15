@@ -25,13 +25,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-crjv+q(m&(zwsibqwu8r&(#3!pacwn6vflz+o1%r4w=*m2tekk'
+SECRET_KEY = os.environ.get("SECRET_KEY", "localkey2024") #replace the SECRET_KEY VARIABLE with this. this means the secret_key is localkey2024, if an environment variable isnt specified. we are going to specify one on render.com
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
+#right below the ALLOW_HOST  variable add this.
+## Handling Allowed Hosts on Render
+## adds the render.com hostname to be in ALLOWED_HOSTS
+# RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+# if RENDER_EXTERNAL_HOSTNAME:
+#     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # Application definition
 
@@ -44,12 +50,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'meetings.apps.MeetingsConfig',
     'rest_framework',
+    "corsheaders", #add this below all the other apps
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True ## Variable CORS_ALLOW_ALL_ORIGINS is set to True to allow unrestricted access to the API.
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
